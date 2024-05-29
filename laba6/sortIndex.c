@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 
+
 pthread_barrier_t barrier;
 
 pthread_mutex_t map_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -92,17 +93,6 @@ void* sort_blocks_with_map(void *args) {
         pthread_mutex_unlock(&map_mutex);
     }
 
-    // if(t_args->num == 0) {
-    //     uint8_t *file_map = t_args->file_map;
-    //     struct data_block *block = (struct data_block*)file_map;
-    //     for (int i = 1; i <= (t_args->sizeBlock * t_args->num_blocks) / sizeof(struct data_block); i++) {
-    //         printf("Thread %lu %f %lu\n", t_args->num, block[i - 1].time_mark, block[i - 1].recno);
-    //         if(i % 4 == 0) {
-    //             printf("\n");
-    //         }
-    //     }
-    // }
-
     pthread_barrier_wait(&barrier);
 
     merge_blocks(args);
@@ -177,23 +167,6 @@ int main(int argc, char *argv[]) {
     uint64_t offset = strtoull(argv[5], NULL, 10); // смещение
 
     struct data_block_header header;
-    // FILE *file = fopen(filename, "rb");
-    // if (!file) {
-    //     perror("Failed to open file");
-    //     return EXIT_FAILURE;
-    // }
-    // fread(&header, sizeof(struct data_block_header), 1, file);
-    // header.idx = (struct data_block*)malloc(header.records * sizeof(struct data_block));
-    // fread(header.idx, sizeof(struct data_block), header.records, file);
-    // printf("File %s opened with %lu records.\n", filename, header.records);
-    // for(int i = 0; i < header.records; i++) {
-    //     printf("%f %lu\n", header.idx[i].time_mark, header.idx[i].recno);
-    //     if (header.idx[i].recno % 4 == 0) {
-    //         printf("\n");
-    //     }
-    // }
-    // fclose(file);
-    // free(header.idx);
 
     pthread_barrier_init(&barrier, NULL, threads + 1);
 

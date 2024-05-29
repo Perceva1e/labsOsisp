@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
     const char *filename = argv[4];
     uint64_t num_records = strtoull(argv[5], NULL, 10);
 
-    if (blocks <= threads) {
+    if (blocks < threads) {
         printf("Count of blocks should be greater than threads.\n");
         return EXIT_FAILURE;
     }
@@ -124,7 +124,7 @@ int main(int argc, char *argv[]) {
                 return EXIT_FAILURE;
             } else {
                 waitpid(pidSortDop, &status, 0);
-                filesize = get_file_size(filename);
+                filesize = get_file_size(filename) - 16;
 
                 if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS) {
                     printf("File %s sorted.\n", filename);
